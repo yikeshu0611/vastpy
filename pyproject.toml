@@ -9,7 +9,7 @@ description = "Drive the Vast large-file viewer from Python (localhost JSON API)
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
-authors = [{ name = "Vast" }]
+authors = [{ name = "ZhangJing", email = "zj391120@163.com" }]
 dependencies = [
   "pandas>=1.5",
 ]

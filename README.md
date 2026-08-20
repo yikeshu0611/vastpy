@@ -1,5 +1,7 @@
 # vastpy
 
+**Author:** ZhangJing \<zj391120@163.com\>
+
 用 Python 驱动 macOS 大文件阅读器 **Vast**（与 R 包 [vastR](https://github.com/yikeshu0611/vastR) 共用同一套 localhost JSON API）。
 
 需要已安装 **Vast.app** 到 `/Applications/Vast.app`。
