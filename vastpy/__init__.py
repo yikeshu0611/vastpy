@@ -15,7 +15,7 @@ import pandas as pd
 
 from . import client as _c
 
-__version__ = "0.6.35"
+__version__ = "0.6.36"
 
 # Re-export connection helpers (R: vast_is_running, vast_log_path, …)
 is_running = _c.is_running

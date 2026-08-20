@@ -1,3 +1,7 @@
+# vastpy 0.6.36
+
+- Support paths follow Bundle ID `com.zhangjing.Vast`
+
 # vastpy 0.6.35
 
 - Docs / messages: English for global users

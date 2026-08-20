@@ -82,7 +82,7 @@ R-style aliases are also available: `vast_open`, `vast_filter`, `vast_sort`, and
 
 ## Notes
 
-- API info file is the same as R: `~/Library/Application Support/com.qo.vast/api.json` (or the MAS container path).
+- API info file is the same as R: `~/Library/Application Support/com.zhangjing.Vast/api.json` (or the MAS container path).
 - If Vast is not running, `open` / requests try to launch `/Applications/Vast.app --api`.
 
 ## License

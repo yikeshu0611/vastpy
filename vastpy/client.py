@@ -15,37 +15,37 @@ from typing import Any
 
 def api_candidates() -> list[Path]:
     if sys.platform == "win32":
-        base = Path(os.environ.get("APPDATA", "")) / "com.qo.vast" / "api.json"
+        base = Path(os.environ.get("APPDATA", "")) / "com.zhangjing.Vast" / "api.json"
         return [base]
     home = Path.home()
     return [
-        home / "Library" / "Application Support" / "com.qo.vast" / "api.json",
+        home / "Library" / "Application Support" / "com.zhangjing.Vast" / "api.json",
         home
         / "Library"
         / "Containers"
-        / "com.qo.vast"
+        / "com.zhangjing.Vast"
         / "Data"
         / "Library"
         / "Application Support"
-        / "com.qo.vast"
+        / "com.zhangjing.Vast"
         / "api.json",
     ]
 
 
 def log_path() -> Path:
     if sys.platform == "win32":
-        return Path(os.environ.get("APPDATA", "")) / "com.qo.vast" / "vast.log"
+        return Path(os.environ.get("APPDATA", "")) / "com.zhangjing.Vast" / "vast.log"
     home = Path.home()
     cands = [
-        home / "Library" / "Application Support" / "com.qo.vast" / "vast.log",
+        home / "Library" / "Application Support" / "com.zhangjing.Vast" / "vast.log",
         home
         / "Library"
         / "Containers"
-        / "com.qo.vast"
+        / "com.zhangjing.Vast"
         / "Data"
         / "Library"
         / "Application Support"
-        / "com.qo.vast"
+        / "com.zhangjing.Vast"
         / "vast.log",
     ]
     for p in cands:
