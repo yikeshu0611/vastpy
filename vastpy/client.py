@@ -15,8 +15,11 @@ from typing import Any
 
 def api_candidates() -> list[Path]:
     if sys.platform == "win32":
-        base = Path(os.environ.get("APPDATA", "")) / "com.zhangjing.Vast" / "api.json"
-        return [base]
+        base = Path(os.environ.get("APPDATA", ""))
+        return [
+            base / "com.zhangjing.Vast" / "api.json",
+            base / "com.qo.vast" / "api.json",
+        ]
     home = Path.home()
     return [
         home / "Library" / "Application Support" / "com.zhangjing.Vast" / "api.json",
@@ -28,6 +31,17 @@ def api_candidates() -> list[Path]:
         / "Library"
         / "Application Support"
         / "com.zhangjing.Vast"
+        / "api.json",
+        # Legacy bundle id (pre-0.6.36)
+        home / "Library" / "Application Support" / "com.qo.vast" / "api.json",
+        home
+        / "Library"
+        / "Containers"
+        / "com.qo.vast"
+        / "Data"
+        / "Library"
+        / "Application Support"
+        / "com.qo.vast"
         / "api.json",
     ]
 
