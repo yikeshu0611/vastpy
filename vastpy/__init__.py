@@ -15,7 +15,7 @@ import pandas as pd
 
 from . import client as _c
 
-__version__ = "0.6.34"
+__version__ = "0.6.35"
 
 # Re-export connection helpers (R: vast_is_running, vast_log_path, …)
 is_running = _c.is_running
@@ -170,7 +170,7 @@ class VastTbl:
 
     def select(self, *columns: str) -> VastTbl:
         if not columns:
-            raise ValueError("select() 需要至少一个列名")
+            raise ValueError("select() needs at least one column name")
         keep = list(columns)
         return VastTbl(
             path=self.path,
@@ -199,7 +199,7 @@ class VastTbl:
         """Filter rows (full-file scan or via attached index)."""
         self.ensure()
         if value is None and op not in ("==",):
-            raise ValueError("filter 需要 value")
+            raise ValueError("filter requires value")
         out = _filter_exec(
             column=column,
             value=value,
@@ -238,7 +238,7 @@ class VastTbl:
         self.ensure()
         cols = self.columns
         if not cols:
-            raise ValueError("没有列可取唯一值，请先 select()")
+            raise ValueError("No columns for unique(); call select() first")
         path = str(_c.cache_path())
         _c.request("POST", "/v1/unique", {"columns": list(cols), "path": path}, timeout=3600)
         return _read_path(path, "\t", 1)
@@ -274,7 +274,7 @@ def _new_tbl(
 ) -> VastTbl:
     path = status.get("path")
     if not path:
-        raise RuntimeError("Vast 未打开文件")
+        raise RuntimeError("No file open in Vast")
     if delim is None:
         delim = str(status.get("delim") or "")
         dn = str(status.get("delim_name") or "").lower()
@@ -306,7 +306,7 @@ def open(
     """Open a file in Vast and return a ``VastTbl`` handle."""
     p = Path(path).expanduser()
     if not p.exists():
-        raise FileNotFoundError(f"文件不存在: {p}")
+        raise FileNotFoundError(f"File not found: {p}")
     body: dict[str, Any] = {"path": _abs(p), "activate": False}
     nd = _c.normalize_delim(delim)
     if nd is not None:
@@ -362,7 +362,7 @@ def layout(delim: Any = None, header: int | None = None) -> dict[str, Any]:
     if header is not None:
         body["header"] = int(header)
     if not body:
-        raise ValueError("请提供 delim 或 header")
+        raise ValueError("Provide delim or header")
     return _c.request("POST", "/v1/layout", body)
 
 
@@ -396,7 +396,7 @@ def build_index(
     force: bool = False,
 ) -> str:
     if not isinstance(x, VastTbl):
-        raise TypeError("需要 VastTbl（由 vastpy.open() 返回）")
+        raise TypeError("Expected a VastTbl from vastpy.open()")
     x.ensure()
     body: dict[str, Any] = {"column": column, "force": bool(force)}
     if path is not None and str(path):
@@ -409,7 +409,7 @@ def attach_index(
     x: VastTbl, column: str | int, path: str | Path | None = None
 ) -> VastTbl:
     if not isinstance(x, VastTbl):
-        raise TypeError("需要 VastTbl（由 vastpy.open() 返回）")
+        raise TypeError("Expected a VastTbl from vastpy.open()")
     x.ensure()
     body: dict[str, Any] = {"column": column}
     if path is not None and str(path):
@@ -426,7 +426,7 @@ def attach_index(
 
 def detach_index(x: VastTbl, column: str | int | None = None) -> VastTbl:
     if not isinstance(x, VastTbl):
-        raise TypeError("需要 VastTbl（由 vastpy.open() 返回）")
+        raise TypeError("Expected a VastTbl from vastpy.open()")
     x.ensure()
     body: dict[str, Any] = {}
     if column is not None:
@@ -451,13 +451,13 @@ def sort(
     max_rows: int = 0,
 ) -> VastTbl:
     if not isinstance(x, VastTbl):
-        raise TypeError("需要 VastTbl（由 vastpy.open() 返回）")
+        raise TypeError("Expected a VastTbl from vastpy.open()")
     order = order.lower()
     if order not in ("asc", "desc"):
-        raise ValueError('order 应为 "asc" 或 "desc"')
+        raise ValueError('order must be "asc" or "desc"')
     type = type.lower()
     if type not in ("auto", "string", "numeric"):
-        raise ValueError('type 应为 "auto" / "string" / "numeric"')
+        raise ValueError('type must be "auto" / "string" / "numeric"')
     x.ensure()
     src = x.path
     cn = str(column)
@@ -566,7 +566,7 @@ def filter(
     """
     if isinstance(data, VastTbl):
         if column is None:
-            raise ValueError('用法: t.filter("col", "==", val) 或 filter(t, column=..., value=...)')
+            raise ValueError('Usage: t.filter("col", "==", val) or filter(t, column=..., value=...)')
         return data.filter(
             column,
             op=op,

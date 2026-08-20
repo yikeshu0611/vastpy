@@ -140,28 +140,28 @@ def ensure(timeout: float = 15.0) -> dict[str, Any]:
     app = app_path()
     if sys.platform == "win32":
         if not app.exists():
-            raise RuntimeError(r"找不到 Vast.exe。请先安装到 Program Files\Vast\Vast.exe")
+            raise RuntimeError(r"Vast.exe not found. Install to Program Files\Vast\Vast.exe")
         subprocess.Popen(
             [str(app), "--api"],
             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
         )
     else:
         if not app.is_dir():
-            raise RuntimeError("找不到 Vast.app。请先安装到 /Applications/Vast.app")
+            raise RuntimeError("Vast.app not found. Install to /Applications/Vast.app")
         rc = subprocess.call(
             ["open", "-g", "-j", "-a", str(app), "--args", "--api"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
         if rc != 0:
-            raise RuntimeError("无法启动 Vast")
+            raise RuntimeError("Failed to launch Vast")
     t0 = time.time()
     while True:
         info = api_info()
         if info is not None:
             return info
         if time.time() - t0 > timeout:
-            raise RuntimeError("Vast 已启动，但 API 未就绪。请确认应用版本 >= 0.6.2")
+            raise RuntimeError("Vast launched but the API is not ready. Require app version >= 0.6.2")
         time.sleep(0.2)
 
 
@@ -187,12 +187,12 @@ def request(
     except urllib.error.HTTPError as e:
         text = e.read().decode("utf-8", errors="replace")
     except urllib.error.URLError as e:
-        raise RuntimeError(f"Vast API 请求失败: {e}") from e
+        raise RuntimeError(f"Vast API request failed: {e}") from e
 
     try:
         parsed = json.loads(text) if text else {}
     except json.JSONDecodeError as e:
-        raise RuntimeError(f"Vast API 请求失败: {text}") from e
+        raise RuntimeError(f"Vast API request failed: {text}") from e
     if parsed.get("ok") is False:
         raise RuntimeError(parsed.get("error") or "request failed")
     return parsed
